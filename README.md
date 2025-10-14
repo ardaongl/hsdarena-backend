@@ -252,8 +252,8 @@ Doğru/Yanlış (TF) soru için:
 ## Proje Yapısı (kısa)
 - `src/auth/*`: Admin ve takım token üretimi, login.
 - `src/quiz/*`: Quiz oluşturma ve session açma.
-- `src/team/*`: Session'a takım katılımı ve team token döndürme.
-- `src/answer/*`: Takım cevap endpoint'i.
+- `src/team/*`: **[ÖĞRENCİ GÖREVİ]** Session'a takım katılımı ve team token döndürme.
+- `src/answer/*`: **[ÖĞRENCİ GÖREVİ]** Takım cevap endpoint'i.
 
 ---
 
@@ -370,67 +370,18 @@ GET /api/quiz/session/{sessionId}/questions
 }
 ```
 
-### 3. Takım Katılımı (Team Token Alma)
+### 3. Takım Katılımı (Team Token Alma) - ÖĞRENCİ GÖREVİ
 ```bash
-# 5. Takım katılımı (public endpoint - authorization gerekmez)
-POST /api/team/join
-{
-  "sessionCode": "ABC123",
-  "teamName": "Red Dragons"
-}
-
-# Response:
-{
-  "teamId": "team-uuid-here",
-  "teamToken": "eyJhbGciOiJIUzI1NiIs..."
-}
+# Bu endpoint öğrenci tarafından yazılacak
+# POST /api/team/join
+# Görev detayları aşağıda
 ```
 
-### 4. Takım Cevap Gönderme
+### 4. Takım Cevap Gönderme - ÖĞRENCİ GÖREVİ
 ```bash
-# 6. Swagger'da Authorize (Team)
-# - "Authorize" butonuna tıklayın
-# - "team-token" schema'sını seçin
-# - Value: eyJhbGciOiJIUzI1NiIs... (Bearer yazmayın!)
-
-# 7. Cevap gönder
-POST /api/answer
-{
-  "sessionId": "session-uuid-here",
-  "questionId": "question-uuid-here",
-  "answerPayload": { "id": "B" },
-  "nonce": "client-unique-123"
-}
-
-# Response:
-{
-  "answerId": "answer-uuid-here",
-  "isCorrect": true,
-  "pointsAwarded": 100,
-  "submittedAt": "2025-10-14T13:30:00.000Z",
-  "message": "Correct answer!"
-}
-```
-
-#### Cevap Formatları:
-**MCQ (Çoktan Seçmeli) Sorular için:**
-```json
-{
-  "sessionId": "session-uuid",
-  "questionId": "question-uuid",
-  "answerPayload": { "id": "A" },
-  "nonce": "unique-client-id"
-}
-```
-
-**TF (Doğru/Yanlış) Sorular için:**
-```json
-{
-  "sessionId": "session-uuid",
-  "questionId": "question-uuid",
-  "answerPayload": { "value": true },
-  "nonce": "unique-client-id"
-}
+# Bu endpoint öğrenci tarafından yazılacak
+# POST /api/answer
+# Görev detayları aşağıda
 ```
 
 ### 5. cURL Test Komutları
@@ -455,30 +406,50 @@ curl -X POST http://localhost:8082/api/quiz/QUIZ_ID/session \
 # Soruları al (SESSION_ID'yi yukarıdaki response'dan alın)
 curl -X GET http://localhost:8082/api/quiz/session/SESSION_ID/questions
 
-# Takım katılımı (SESSION_CODE'u yukarıdaki response'dan alın)
-curl -X POST http://localhost:8082/api/team/join \
-  -H "Content-Type: application/json" \
-  -d '{"sessionCode":"SESSION_CODE","teamName":"Red Dragons"}'
+# Takım katılımı (ÖĞRENCİ GÖREVİ - SESSION_CODE'u yukarıdaki response'dan alın)
+# curl -X POST http://localhost:8082/api/team/join \
+#   -H "Content-Type: application/json" \
+#   -d '{"sessionCode":"SESSION_CODE","teamName":"Red Dragons"}'
 
-# Cevap gönder (TEAM_TOKEN'ı yukarıdaki response'dan alın)
-curl -X POST http://localhost:8082/api/answer \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer TEAM_TOKEN" \
-  -d '{"sessionId":"SESSION_ID","questionId":"QUESTION_ID","answerPayload":{"id":"B"},"nonce":"client-123"}'
-
-# Response örneği:
-# {
-#   "answerId": "answer-uuid-here",
-#   "isCorrect": true,
-#   "pointsAwarded": 100,
-#   "submittedAt": "2025-10-14T13:30:00.000Z",
-#   "message": "Correct answer!"
-# }
+# Cevap gönder (ÖĞRENCİ GÖREVİ - TEAM_TOKEN'ı yukarıdaki response'dan alın)
+# curl -X POST http://localhost:8082/api/answer \
+#   -H "Content-Type: application/json" \
+#   -H "Authorization: Bearer TEAM_TOKEN" \
+#   -d '{"sessionId":"SESSION_ID","questionId":"QUESTION_ID","answerPayload":{"id":"B"},"nonce":"client-123"}'
 ```
 
 ### 6. Swagger UI Test Rehberi
 1. **Swagger UI**: `http://localhost:8082/docs`
 2. **Admin işlemleri**: `admin-token` schema'sını kullanın
-3. **Team işlemleri**: `team-token` schema'sını kullanın
-4. **Authorization**: Sadece token'ı girin, "Bearer " yazmayın
-5. **Session Code**: 6 karakterli büyük harf ve rakam kombinasyonu (örn: ABC123)
+3. **Authorization**: Sadece token'ı girin, "Bearer " yazmayın
+4. **Session Code**: 6 karakterli büyük harf ve rakam kombinasyonu (örn: ABC123)
+
+---
+
+## 🎓 ÖĞRENCİ GÖREVLERİ
+
+Bu proje 2 öğrenciye ayrı görevler verilecektir:
+
+### 📋 Görev 1: Team Endpoint'leri
+- **Görevli**: [Öğrenci 1]
+- **Dosya**: `OGRENCI-GOREVLERI.md` - Görev 1 bölümü
+- **Yapılacak**: `POST /api/team/join` endpoint'i
+- **Özellikler**: Session code ile team oluşturma, team token döndürme
+
+### 📋 Görev 2: Answer Endpoint'leri  
+- **Görevli**: [Öğrenci 2]
+- **Dosya**: `OGRENCI-GOREVLERI.md` - Görev 2 bölümü
+- **Yapılacak**: `POST /api/answer` endpoint'i
+- **Özellikler**: Cevap doğrulama, puan hesaplama, duplicate kontrolü
+
+### 🚀 Başlamadan Önce
+1. **Swagger UI'ya erişin**: `http://localhost:8082/docs`
+2. **Admin login yapın**: `admin@example.com` / `Admin123!`
+3. **Mevcut endpoint'leri test edin**: Quiz oluşturma, session başlatma
+4. **Görev dosyasını okuyun**: `OGRENCI-GOREVLERI.md`
+
+### ✅ Teslim Kriterleri
+- [ ] Kod GitHub'a push edildi
+- [ ] Swagger UI'da test edildi
+- [ ] README.md'ye test sonuçları eklendi
+- [ ] Hangi endpoint'ler yazıldığı belirtildi

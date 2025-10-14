@@ -36,17 +36,6 @@ async function bootstrap() {
       bearerFormat: 'JWT',
       in: 'header',
       name: 'Authorization',
-      description: 'Bu alana SADECE ham token girin. "Bearer " yazmayın. (Team endpoint\'leri için)',
-    },
-    'team-token', // <-- team endpoint'leri için
-  )
-  .addBearerAuth(
-    {
-      type: 'http',
-      scheme: 'bearer',
-      bearerFormat: 'JWT',
-      in: 'header',
-      name: 'Authorization',
       description: 'Bu alana SADECE ham token girin. "Bearer " yazmayın. (Admin endpoint\'leri için)',
     },
     'admin-token', // <-- admin endpoint'leri için
