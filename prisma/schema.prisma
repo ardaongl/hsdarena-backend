@@ -1,0 +1,107 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum QuestionType {
+  MCQ
+  TF
+}
+
+enum SessionStatus {
+  CREATED
+  ACTIVE
+  PAUSED
+  FINISHED
+}
+
+model User {
+  id           String   @id @default(uuid()) @db.Uuid
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  quizzes      Quiz[]
+}
+
+model Quiz {
+  id         String        @id @default(uuid()) @db.Uuid
+  title      String
+  visibility String        @default("private")
+  createdBy  String        @db.Uuid
+  createdAt  DateTime      @default(now())
+  settings   Json?
+  user       User          @relation(fields: [createdBy], references: [id])
+  questions  Question[]
+  sessions   QuizSession[]
+}
+
+model Question {
+  id             String       @id @default(uuid()) @db.Uuid
+  quizId         String       @db.Uuid
+  indexInQuiz    Int
+  text           String
+  type           QuestionType
+  choices        Json?
+  correctAnswer  Json
+  timeLimitSec   Int          @default(20)
+  points         Int          @default(100)
+  quiz           Quiz         @relation(fields: [quizId], references: [id])
+  answers        Answer[]
+
+  @@index([quizId])
+  @@unique([quizId, indexInQuiz])
+}
+
+model QuizSession {
+  id                   String        @id @default(uuid()) @db.Uuid
+  quizId               String        @db.Uuid
+  sessionCode          String        @unique
+  status               SessionStatus @default(CREATED)
+  currentQuestionIndex Int?          @default(0)
+  startsAt             DateTime?
+  createdAt            DateTime      @default(now())
+  quiz                 Quiz          @relation(fields: [quizId], references: [id])
+  teams                Team[]
+  answers              Answer[]
+}
+
+model Team {
+  id            String      @id @default(uuid()) @db.Uuid
+  sessionId     String      @db.Uuid
+  name          String
+  disqualified  Boolean     @default(false)
+  joinedAt      DateTime    @default(now())
+  session       QuizSession @relation(fields: [sessionId], references: [id])
+  answers       Answer[]
+
+  @@unique([sessionId, name])
+}
+
+model Answer {
+  id             String      @id @default(uuid()) @db.Uuid
+  sessionId      String      @db.Uuid
+  questionId     String      @db.Uuid
+  teamId         String      @db.Uuid
+  answerPayload  Json
+  isCorrect      Boolean
+  pointsAwarded  Int         @default(0)
+  answeredAt     DateTime    @default(now())
+  latencyMs      Int?
+  session        QuizSession @relation(fields: [sessionId], references: [id])
+  question       Question    @relation(fields: [questionId], references: [id])
+  team           Team        @relation(fields: [teamId], references: [id])
+
+  @@unique([sessionId, questionId, teamId])
+  @@index([teamId])
+}
+
+model ScoreboardSnapshot {
+  id        String   @id @default(uuid()) @db.Uuid
+  sessionId String   @db.Uuid
+  payload   Json
+  takenAt   DateTime @default(now())
+}

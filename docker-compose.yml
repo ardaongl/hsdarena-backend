@@ -1,0 +1,32 @@
+version: '3.9'
+services:
+  # postgres:
+  #   image: postgres:16
+  #   environment:
+  #     POSTGRES_USER: quiz
+  #     POSTGRES_PASSWORD: quiz
+  #     POSTGRES_DB: quiz
+  #   ports: ["55432:5432"]
+  #   volumes:
+  #     - pgdata:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    ports: ["6379:6379"]
+
+  api:
+  build: .
+  depends_on: [redis]
+  environment:
+    DATABASE_URL: ${DATABASE_URL}
+    REDIS_URL: redis://redis:6379
+    JWT_ADMIN_SECRET: dev-admin-secret
+    JWT_TEAM_SECRET: dev-team-secret
+    JWT_EXP_ADMIN: 15m
+    JWT_EXP_TEAM: 60m
+    NODE_ENV: development
+  ports: ["8080:8080"]
+  command: npm run start
+
+volumes:
+  pgdata:
