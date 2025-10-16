@@ -453,3 +453,26 @@ Bu proje 2 öğrenciye ayrı görevler verilecektir:
 - [ ] Swagger UI'da test edildi
 - [ ] README.md'ye test sonuçları eklendi
 - [ ] Hangi endpoint'ler yazıldığı belirtildi
+
+
+Öğrenci Katkıları
+Görev 2 – Answer Endpoint’leri
+
+Sorumlu: [Yunus Ozdemir]
+
+POST /api/answer endpoint’i geliştirildi.
+
+Cevap doğrulama, puan hesaplama ve duplicate gönderim kontrolü eklendi.
+
+Dinamik puanlama sistemi uygulandı (soru tipi, zorluk seviyesi ve cevap süresine göre).
+
+AnswerService içerisinde doğrulama, puanlama ve kayıt işlemleri tamamlandı.
+
+TeamJwtGuard kullanılarak takım kimlik doğrulaması entegre edildi.
+
+Swagger UI üzerinden testler gerçekleştirildi ve tüm testler 200 OK sonucu verdi.
+
+Test amacıyla basit Team endpoint’leri oluşturularak işlevsel doğrulama sağlandı.
+
+Sonuç:
+Tüm gereksinimler başarıyla yerine getirildi. Kod, mevcut Prisma ve Redis altyapısı ile tam uyumludur.
