@@ -7,7 +7,8 @@ import { AuthModule } from './auth/auth.module';
 import { QuizModule } from './quiz/quiz.module';
 import { RealtimeModule } from './realtime/realtime.module';
 import { AppController } from './app.controller';
-
+import { AnswerModule } from './answer/answer.module';
+import { TeamModule } from './team/team.module';
 
 @Module({
 imports: [
@@ -16,7 +17,9 @@ PrismaModule,
 RedisModule,
 AuthModule,
 QuizModule,
-RealtimeModule
+RealtimeModule,
+AnswerModule,
+TeamModule
 ],
 controllers: [AppController], 
 })
