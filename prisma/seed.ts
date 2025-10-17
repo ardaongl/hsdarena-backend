@@ -22,10 +22,10 @@ settings: { bonusMax: 50 },
 questions: {
 create: [
 {
-indexInQuiz: 1,
-text: 'Cumhuriyet hangi yıl ilan edildi?',
+indexInQuiz: 1, // Zorunlu alan eklendi
+text: '2+2=?',
 type: 'MCQ',
-choices: [{ id: 'A', text: '1920' }, { id: 'B', text: '1923' }],
+choices: [{ id: 'A', text: '3' }, { id: 'B', text: '4' }],
 correctAnswer: { id: 'B' },
 timeLimitSec: 20,
 points: 100

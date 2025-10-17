@@ -26,19 +26,16 @@ async function bootstrap() {
 
   // ---- Swagger ----
    const config = new DocumentBuilder()
-  .setTitle('Quiz Backend API')
-  .setDescription('Kahoot-benzeri quiz platformu için REST & WS API')
+  .setTitle('HSD Arena API')
+  .setDescription('Quiz API Documentation')
   .setVersion('0.1.0')
   .addBearerAuth(
-    {
-      type: 'http',
-      scheme: 'bearer',
-      bearerFormat: 'JWT',
-      in: 'header',
-      name: 'Authorization',
-      description: 'Bu alana SADECE ham token girin. "Bearer " yazmayın. (Admin endpoint\'leri için)',
-    },
-    'admin-token', // <-- admin endpoint'leri için
+    { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
+    'team-token'
+  )
+  .addBearerAuth(
+    { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
+    'admin-token'
   )
   .build();
 
