@@ -40,16 +40,16 @@ model Quiz {
 }
 
 model Question {
-  id             String       @id @default(uuid()) @db.Uuid
-  quizId         String       @db.Uuid
+  id          String   @id @default(uuid())
+  quizId      String
+  quiz        Quiz     @relation(fields: [quizId], references: [id])
+  text        String
+  type        QuestionType   // 'MCQ' | 'TF'
+  choices     Json?    // Array<{id: string, text: string}>
+  correctAnswer Json   // {id?: string, value?: boolean}
+  timeLimitSec Int
+  points      Int
   indexInQuiz    Int
-  text           String
-  type           QuestionType
-  choices        Json?
-  correctAnswer  Json
-  timeLimitSec   Int          @default(20)
-  points         Int          @default(100)
-  quiz           Quiz         @relation(fields: [quizId], references: [id])
   answers        Answer[]
 
   @@index([quizId])
@@ -60,7 +60,7 @@ model QuizSession {
   id                   String        @id @default(uuid()) @db.Uuid
   quizId               String        @db.Uuid
   sessionCode          String        @unique
-  status               SessionStatus @default(CREATED)
+  status               SessionStatus @default(ACTIVE)
   currentQuestionIndex Int?          @default(0)
   startsAt             DateTime?
   createdAt            DateTime      @default(now())
