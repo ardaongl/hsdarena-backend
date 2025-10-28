@@ -9,6 +9,7 @@ import { RealtimeModule } from './realtime/realtime.module';
 import { AppController } from './app.controller';
 import { AnswerModule } from './answer/answer.module';
 import { TeamModule } from './team/team.module';
+import { ScoreboardModule } from './scoreboard/scoreboard.module';
 
 @Module({
 imports: [
@@ -19,7 +20,8 @@ AuthModule,
 QuizModule,
 RealtimeModule,
 AnswerModule,
-TeamModule
+TeamModule,
+ScoreboardModule
 ],
 controllers: [AppController], 
 })

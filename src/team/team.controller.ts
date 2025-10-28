@@ -49,7 +49,19 @@ export class TeamController {
       required: ['sessionCode', 'teamName']
     }
   })
-  @ApiResponse({ status: 201, description: 'Team joined successfully. Returns teamId and token.'})
+  @ApiResponse({ 
+    status: 201, 
+    description: 'Team joined successfully. Returns teamId, token, quizId and sessionCode.',
+    schema: {
+      type: 'object',
+      properties: {
+        teamId: { type: 'string', example: 'team-uuid-here' },
+        teamToken: { type: 'string', example: 'eyJhbGciOiJIUzI1...' },
+        quizId: { type: 'string', example: 'quiz-uuid-here' },
+        sessionCode: { type: 'string', example: 'ABC123' }
+      }
+    }
+  })
   @ApiResponse({ status: 404, description: 'Session with the given code was not found.'})
   @ApiResponse({ status: 409, description: 'A team with this name already exists in the session.'})
   async joinSession(@Body() dto: TeamJoinDto) {
@@ -94,6 +106,11 @@ export class TeamController {
       type: 'team',
     });
 
-    return { teamId: team.id, teamToken };
+    return { 
+      teamId: team.id, 
+      teamToken,
+      quizId: session.quizId,
+      sessionCode: session.sessionCode
+    };
   }
 }

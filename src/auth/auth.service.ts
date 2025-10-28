@@ -16,13 +16,20 @@ const ok = await argon.verify(user.passwordHash, password);
 if (!ok) throw new UnauthorizedException('Invalid credentials');
 
 
-const payload = { sub: user.id, role: 'admin', email: user.email };
-const accessToken = await this.jwt.signAsync(payload, {
-secret: process.env.JWT_ADMIN_SECRET,
-expiresIn: process.env.JWT_EXP_ADMIN || '15m',
-algorithm: 'HS256'
-});
-return { accessToken };
+    const payload = { sub: user.id, role: 'admin', email: user.email };
+    const access_token = await this.jwt.signAsync(payload, {
+      secret: process.env.JWT_ADMIN_SECRET,
+      expiresIn: process.env.JWT_EXP_ADMIN || '15m',
+      algorithm: 'HS256'
+    });
+    return { 
+      access_token,
+      user: {
+        id: user.id,
+        email: user.email,
+        role: 'admin'
+      }
+    };
 }
 
 

@@ -78,9 +78,9 @@ points: q.points
 };
 }
 
-async getSessionQuestions(sessionId: string) {
+async getSessionQuestions(sessionCode: string) {
 const session = await this.prisma.quizSession.findUnique({
-where: { id: sessionId },
+where: { sessionCode: sessionCode },
 include: {
 quiz: {
 include: {
