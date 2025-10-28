@@ -183,19 +183,77 @@ export class QuizController {
       }
     }
   })
+  @ApiResponse({
+    status: 404,
+    description: 'Quiz not found'
+  })
   getQuizQuestions(@Param('quizId') quizId: string) {
     return this.service.getQuizQuestions(quizId);
   }
 
-  @Get('session/:sessionId/questions')
+  @Get(':quizId')
   @ApiOperation({ 
-    summary: 'Get session questions',
-    description: 'Retrieve questions for a specific quiz session. Public endpoint.'
+    summary: 'Get quiz details',
+    description: 'Retrieve quiz details by quiz ID. Public endpoint.'
   })
   @ApiParam({
-    name: 'sessionId',
-    description: 'Session ID to get questions for',
-    example: 'session_456',
+    name: 'quizId',
+    description: 'Quiz ID to get details for',
+    example: 'quiz_123',
+    type: 'string'
+  })
+  @ApiResponse({ 
+    status: 200, 
+    description: 'Quiz retrieved successfully',
+    schema: {
+      type: 'object',
+      properties: {
+        quizId: { type: 'string', example: 'quiz_123' },
+        quizTitle: { type: 'string', example: 'Turkey Geography Quiz' },
+        questions: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              id: { type: 'string', example: 'question_1' },
+              index: { type: 'number', example: 1 },
+              text: { type: 'string', example: 'What is the capital of Turkey?' },
+              type: { type: 'string', example: 'MCQ' },
+              choices: {
+                type: 'array',
+                items: {
+                  type: 'object',
+                  properties: {
+                    id: { type: 'string', example: 'choice_1' },
+                    text: { type: 'string', example: 'Istanbul' }
+                  }
+                }
+              },
+              timeLimitSec: { type: 'number', example: 30 },
+              points: { type: 'number', example: 10 }
+            }
+          }
+        }
+      }
+    }
+  })
+  @ApiResponse({ 
+    status: 404, 
+    description: 'Quiz not found'
+  })
+  getQuiz(@Param('quizId') quizId: string) {
+    return this.service.getQuizQuestions(quizId);
+  }
+
+  @Get('session/:sessionCode/questions')
+  @ApiOperation({ 
+    summary: 'Get session questions',
+    description: 'Retrieve questions for a specific quiz session by session code. Public endpoint.'
+  })
+  @ApiParam({
+    name: 'sessionCode',
+    description: 'Session code to get questions for',
+    example: 'ABC123',
     type: 'string'
   })
   @ApiResponse({ 
@@ -226,7 +284,7 @@ export class QuizController {
       }
     }
   })
-  getSessionQuestions(@Param('sessionId') sessionId: string) {
-    return this.service.getSessionQuestions(sessionId);
+  getSessionQuestions(@Param('sessionCode') sessionCode: string) {
+    return this.service.getSessionQuestions(sessionCode);
   }
 }

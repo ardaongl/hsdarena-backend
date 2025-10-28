@@ -22,7 +22,7 @@ import { Logger } from '@nestjs/common';
     origin: process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000'],
     credentials: true
   },
-  namespace: '/quiz',
+  namespace: '/realtime',
 })
 export class QuizGateway implements OnGatewayConnection, OnGatewayDisconnect {
   private readonly logger = new Logger(QuizGateway.name);
